@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Netflix Vibe</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background-color: #141414;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    body.light-mode {
+      background-color: #f4f4f4;
+      color: #222;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 3rem;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    body.light-mode .header {
+      background-color: #fff;
+    }
+
+    .header img {
+      width: 120px;
+    }
+
+    .header button, .toggle-theme {
+      background-color: #e50914;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 1rem;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6rem 2rem;
+      background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://assets.nflxext.com/ffe/siteui/vlv3/8b8ab5a6-d1d4-4c32-9c27-c1ff3c1f3dd2/e0274bc4-b030-4f91-9b58-c2331c8b85ff/US-en-20240401-popsignuptwoweeks-perspective_alpha_website_large.jpg') no-repeat center/cover;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero h2 {
+      font-size: 1.5rem;
+      font-weight: normal;
+      margin-bottom: 2rem;
+    }
+
+    .mood-picker, .watch-party {
+      background-color: rgba(255,255,255,0.08);
+      padding: 2rem;
+      margin-top: 2rem;
+      border-radius: 10px;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    body.light-mode .mood-picker, body.light-mode .watch-party {
+      background-color: rgba(0,0,0,0.05);
+    }
+
+    select, input {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      width: 100%;
+      border-radius: 5px;
+      border: none;
+    }
+
+    button {
+      margin-top: 1rem;
+      background-color: #e50914;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      color: white;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .output {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix Logo" />
+    <div class="theme-toggle">
+      <button onclick="toggleTheme()" class="toggle-theme">🌗 Toggle Theme</button>
+      <button>Sign In</button>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>Welcome to Netflix Vibe 🎥</h1>
+    <h2>Movies for Every Mood. Watch with Friends.</h2>
+
+    <div class="mood-picker">
+      <h3>🎭 Pick a Mood</h3>
+      <select id="mood">
+        <option value="happy">😊 Happy</option>
+        <option value="sad">😢 Sad</option>
+        <option value="thrilled">😲 Thrilled</option>
+        <option value="romantic">❤️ Romantic</option>
+        <option value="adventurous">🌍 Adventurous</option>
+      </select>
+      <button onclick="suggestMovie()">Get Movie Suggestion</button>
+      <div class="output" id="moodOutput"></div>
+    </div>
+
+    <div class="watch-party">
+      <h3>🎉 Create a Watch Party</h3>
+      <input type="text" id="userName" placeholder="Enter your name" />
+      <button onclick="createParty()">Generate Watch Party Code</button>
+      <div class="output" id="partyOutput"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Netflix Vibe by Somya Sharma | Pixel Plus Hackathon 2025
+  </div>
+
+  <script>
+    const moodMovies = {
+      happy: ["Paddington 2", "The Secret Life of Pets", "Yes Day"],
+      sad: ["A Silent Voice", "The Pursuit of Happyness", "Five Feet Apart"],
+      thrilled: ["Inception", "Bird Box", "Extraction"],
+      romantic: ["To All the Boys", "The Notebook", "La La Land"],
+      adventurous: ["Jumanji", "Uncharted", "Indiana Jones"]
+    };
+
+    function suggestMovie() {
+      const mood = document.getElementById('mood').value;
+      const options = moodMovies[mood];
+      const pick = options[Math.floor(Math.random() * options.length)];
+      const message = `Try watching: "${pick}" for your current mood.`;
+      document.getElementById('moodOutput').innerText = message;
+
+      // Voice assistant
+      const synth = window.speechSynthesis;
+      const utter = new SpeechSynthesisUtterance(message);
+      synth.speak(utter);
+    }
+
+    function createParty() {
+      const user = document.getElementById('userName').value.trim();
+      if (!user) {
+        document.getElementById('partyOutput').innerText = "Please enter a name.";
+        return;
+      }
+      const roomCode = "NP-" + Math.random().toString(36).substring(2, 7).toUpperCase();
+      document.getElementById('partyOutput').innerText = `Hey ${user}, share this Watch Party code: ${roomCode}`;
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("light-mode");
+    }
+  </script>
+</body>
+</html>
