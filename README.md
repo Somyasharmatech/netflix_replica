@@ -11,6 +11,6 @@ A unique and fun Netflix-style frontend that suggests movies based on your mood,
 - 100% Responsive & Vanilla HTML/CSS/JS
 
 ## 🚀 Live Demo
-[Click here to view the project](https://yourusername.github.io/netflix-vibe/)
+[Click here to view the project](https://somyasharmatech.github.io/netflix_replica/)
 
 Made by Somya Sharma 💖
